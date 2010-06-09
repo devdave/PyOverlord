@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="4f96a309-1963-4025-9c37-9d140607ea62" kpf_version="4" name="pyproxy.kpf">
+<preference-set idref="4f96a309-1963-4025-9c37-9d140607ea62">
+  <boolean id="import_live">1</boolean>
+</preference-set>
+</project>
