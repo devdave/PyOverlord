@@ -3,6 +3,26 @@ import cherrypy
 from cherrypy import expose
 import urllib2
 import urllib
+import StringIO
+import gzip
+
+
+class HTTPRewriteRedirect(urllib2.HTTPRedirectHandler):
+    def __init__(self, sourceURL, targetURL):
+        """
+        Given the two URL, rewrite the redirect URL if it contains sourceURL with targetURL
+        @param sourceURL a FQDN URL (ex http://remoteserver.com)
+        @param targetURL a FQDN URL (ex http://myserver.com )
+        """
+        self.sourceURL = sourceURL
+        self.targetURL = targetURL
+    
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        if newurl.find(self.sourceURL):
+            newurl = newurl.replace(self.sourceURL, self.targetURL)
+        
+        urllib2.HTTPRedirectHandler.redirect_request(self, req, fp, code, msg, headers, newurl)
+        super(HTTPRewriteRedirect, self).redirect_request(self, req, fp, code, msg, headers, newurl)
 
 class Overlord(object):
     
@@ -84,37 +104,43 @@ class Root(object):
                 
         response = urllib2.urlopen(request)
         
+        charset = None
+        encoded = False
+        
         for k, v in response.headers.dict.items():
+            if k == "cotent-type":
+                contentType = response.headers['content-type'].split(";")[0]
+                charset = response.headers['content-type'].split("charset=")[-1] if response.headers['content-type'].find("charset=") >= 0 else None
+            if k == "content-encoding":
+                encoded = True
+                continue
+                #we're going to be de-compressing the stream, so prevent passing this one on
+            
             cherrypy.response.headers[k] = v
         
         contentType = response.headers['content-type'].split(";")[0]
-        charset = response.headers['content-type'].split("charset=")[-1] if response.headers['content-type'].find("charset=") >= 0 else None
+        
                 
         #TODO 
-        if contentType.find("text/") >= 0:            
+        if contentType.find("text/") >= 0:
             payload = response.read()
-            
-            if charset:
-                try:
-                    payload = payload.decode(charset).encode("utf-8")
-                except UnicodeDecodeError , e1:
-                    cherrypy.log("Attempt 1 to decode bytestream failed: %s " % e1)
-                    try:
-                        payload = unicode(payload, charset)
-                    except UnicodeDecodeError , e2:
-                        cherrypy.log("Attempt 2 to decode bytestream failed %s" % e2)
-                        
+            payload = self.decompressResponse(payload) if encoded == True else payload
+            payload = payload.decode(charset) if charset else payload
                 
             return self.cleanOutput(payload )
         else:
             return response.read()
-        
+    
+    def decompressResponse(self, payload):
+        compressed = StringIO.StringIO(payload)
+        gzipObj = gzip.GzipFile(fileobj=compressed)
+        return gzipObj.read();
     
     def cleanOutput(self, payload):
         target = u"http://%s" % self.overlord.host_name
         cherrypy.log("%s" % payload.__class__)        
         cherrypy.log("Attempting to fix URLS for %s" % target )        
-        payload = payload.replace(target, "wtf/")
+        payload = payload.replace(target, u"http://127.0.0.1:8080")
         
         
         return  payload
