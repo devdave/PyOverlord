@@ -1,9 +1,12 @@
 Project: PyOverlord
-Alt. name: overlord of python
-Alt. name: Lord python over
-Alt. name: Python Overlord of python
-Alt. name: Python Overlord
-Short name: PyOV
+Alt. names:
+*overlord of python
+* Lord python over
+* Python Overlord of python
+* Python Overlord
+
+Short name
+   PyOV
 
 Description:
    Currently in the prototyping phase, PyOv acts as a dedicated or dynamic proxt between a remote host

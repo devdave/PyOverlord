@@ -1,8 +1,15 @@
 
 import cherrypy
 from root import Root
-from paste import evalexception
-from paste.httpexceptions import *
+try:
+    from paste import evalexception
+    from paste.httpexceptions import *
+except ImportError:
+    print "Missing paster, a non-critical dependancy that makes debugging a breeze"
+    friendlyExceptions = False
+else:
+    friendlyExceptions = True
+    
     
 import sqlite3
 
