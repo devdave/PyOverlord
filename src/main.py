@@ -37,6 +37,7 @@ if __name__ == "__main__":
     cherrypy.config.update(getConfig())
     # Create a WSGI application
     app = cherrypy.Application(Root())
-    app.wsgiapp.pipeline.append(('paste_exc', evalexception.middleware.EvalException))
+    if friendlyExceptions:
+        app.wsgiapp.pipeline.append(('paste_exc', evalexception.middleware.EvalException))
     cherrypy.quickstart(app)
     
