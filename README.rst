@@ -1,7 +1,7 @@
 Project: PyOverlord
 Alt. names
 
-*overlord of python
+* overlord of python
 * Lord python over
 * Python Overlord of python
 * Python Overlord
@@ -31,12 +31,12 @@ Changelog:
    Starting to cleanup the whole mess and get it into a cleaner foundation to build on.
    
 Roadmap:
-   Cleanup the codebase a bit more, add a static path for content ( Javascript, css, etc )
-   Database capturing of the dialog focusing on text/* content ( waste of space to store images/binaries )
-   During the above, add in instrumentation to review DB content
-   Add ability to store in DB or some other store host names
-   Mid-point optimization, cleanup & refactor as necessary for speed/memory concerns
-   Feasibility study of integrating JS or some other scripting language for TRX processing
-   Feasibility study of using JS or pure Python for applying tests ( ex has etags, caching, etc )
-   Add payload injects for on page comments and tools
-   Also, at the end there will be cake.
+   * Cleanup the codebase a bit more, add a static path for content ( Javascript, css, etc )
+   * Database capturing of the dialog focusing on text/* content ( waste of space to store images/binaries )
+   * During the above, add in instrumentation to review DB content
+   * Add ability to store in DB or some other store host names
+   * Mid-point optimization, cleanup & refactor as necessary for speed/memory concerns
+   * Feasibility study of integrating JS or some other scripting language for TRX processing
+   * Feasibility study of using JS or pure Python for applying tests ( ex has etags, caching, etc )
+   * Add payload injects for on page comments and tools
+   * Also, at the end there will be cake.
